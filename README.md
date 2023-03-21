@@ -1,343 +1,192 @@
-# Kohya Trainer
-[![GitHub Repo stars](https://img.shields.io/github/stars/Linaqruf/kohya-trainer?style=social)](https://github.com/Linaqruf/kohya-trainer/)</a> [![ko-fi](https://img.shields.io/badge/Support%20me%20on%20Ko--fi-F16061?logo=ko-fi&logoColor=white&style=flat)](https://ko-fi.com/linaqruf) <a href="https://saweria.co/linaqruf"><img alt="Saweria" src="https://img.shields.io/badge/Saweria-7B3F00?style=flat&logo=ko-fi&logoColor=white"/></a>
+This repository contains training, generation and utility scripts for Stable Diffusion.
 
-Github Repository for [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts) colab notebook implementation
-| Notebook Name | Description | Link | Old Commit |
-| --- | --- | --- | --- |
-| [Kohya LoRA Dreambooth](https://github.com/Linaqruf/kohya-trainer/blob/main/kohya-LoRA-dreambooth.ipynb) | LoRA Training (Dreambooth method) | [![](https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/main/kohya-LoRA-dreambooth.ipynb) | [![](https://img.shields.io/static/v1?message=Older%20Version&logo=googlecolab&labelColor=5c5c5c&color=e74c3c&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/bc0892647cb17492a106ad1d05716e091eda13f6/kohya-LoRA-dreambooth.ipynb) | 
-| [Kohya LoRA Fine-Tuning](https://github.com/Linaqruf/kohya-trainer/blob/main/kohya-LoRA-finetuner.ipynb) | LoRA Training (Fine-tune method) | [![](https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/main/kohya-LoRA-finetuner.ipynb) | [![](https://img.shields.io/static/v1?message=Older%20Version&logo=googlecolab&labelColor=5c5c5c&color=e74c3c&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/fb96280233d3434819ba5850b2c968150c4720f7/kohya-LoRA-finetuner.ipynb) | 
-| [Kohya Trainer](https://github.com/Linaqruf/kohya-trainer/blob/main/kohya-trainer.ipynb) | Native Training | [![](https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/main/kohya-trainer.ipynb) | [![](https://img.shields.io/static/v1?message=Older%20Version&logo=googlecolab&labelColor=5c5c5c&color=e74c3c&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/21ad4942a917d3fd1ad6c03d87d16677b427254b/kohya-trainer.ipynb) | 
-| [Kohya Dreambooth](https://github.com/Linaqruf/kohya-trainer/blob/main/kohya-dreambooth.ipynb) | Dreambooth Training | [![](https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/main/kohya-dreambooth.ipynb) | [![](https://img.shields.io/static/v1?message=Older%20Version&logo=googlecolab&labelColor=5c5c5c&color=e74c3c&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/9c7f891981bee92cc7690f2094f892c46feb99e2/kohya-dreambooth.ipynb) | 
-| [Fast Kohya Trainer](https://github.com/Linaqruf/kohya-trainer/blob/main/fast-kohya-trainer.ipynb) `NEW`| Easy 1-click LoRA & Native Training| [![](https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/main/fast-kohya-trainer.ipynb) |
-| [Cagliostro Colab UI](https://github.com/Linaqruf/sd-notebook-collection/blob/main/cagliostro-colab-ui.ipynb) `NEW`| A Customizable Stable Diffusion Web UI| [![](https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20&style=flat)](https://colab.research.google.com/github/Linaqruf/sd-notebook-collection/blob/main/cagliostro-colab-ui.ipynb) | 
+[__Change History__](#change-history) is moved to the bottom of the page.
+更新履歴は[ページ末尾](#change-history)に移しました。
 
-## Updates
-#### 2023
-##### v14.6 (21/03):
-__What Changes?__
-- Reformat 4 main notebook with [black python formatter](https://github.com/psf/black).
-- Changed `xformers` wheels version to `0.0.17.dev476` and `triton` to `2.0.0.post1`, to prevent triton installing `torch 2.0.0`.
-- Downgrading google perftools and tcmalloc for ram patch, credit to [camenduru/stable-diffusion-webui-colab](https://github.com/camenduru/stable-diffusion-webui-colab).
-- Removed `delete metadata` option in `4.1. Data Cleaning` cell, no more accidentally deleted metadata.
-- Added `remove_underscore` option in `4.2.2. Waifu Diffusion 1.4 Tagger V2` cell
-- Revamped `4.2.3. Custom Caption/Tag (Optional)` cell, now you can add/remove desired tags.
-  - Tag example: `1girl, brown hair, school uniform, smile`
-  - if your tag has spaces, replace that spaces (` `) with underscore (`_`): 
-      - custom_tag	: `blue_berry`
-      - output			: `blue berry, 1girl, brown hair, school uniform, smile`
-  - if you set `append` to `True`, your custom tag will be added to end of line instead
-      - custom_tag	: `blue_berry`
-      - output			: `1girl, brown hair, school uniform, smile, blue berry`
-  - if you want to add or remove multiple tags, add space (` `):
-      - custom_tag : `blue_berry red_juice`, 
-      - output: `blue berry, red juice, 1girl, brown hair, school uniform, smile`
-  - if you want to remove a tag, set `remove_tag` to `True`
-      - custom_tag	: `brown hair`
-      - output			: `1girl, school uniform, smile, blue berry`
-- Fixes bug when generating `.txt` or `.caption` files in `4.2.3. Custom Caption/Tag (Optional)`, it's added additional (.), e.g. `image..txt`
-- Deleted `5.3. Sample prompt config`, sample prompt automatically created. If you want to add another prompt. Edit `sample_prompt.txt` directly in colab notebook editor
-- Even though `token` is not `caption`, now you can add token to caption files in `5.2. Dataset Config`, this will function in the same way as the `4.2.3. Custom Caption/Tag (Optional)` cell. By doing this, it automatically set `keep_tokens` to > `1`
-  - You can enable or disable the sample prompt in `5.4. Training config`
-  - Automatically generating sample every 1 epoch for `LoRA` notebook and every 100 steps for `Dreambooth` and `Finetuning` notebook
-  - The prompt weighting such as `( )` and `[ ]` are working.
-  - Support long prompt weighting pipeline
-- Revamped `5.3. LoRA and Optimizer Config`
-  - No more manually setting the `network_module`
-  - No more manually setting the `network_args`
-  - Added `Recommended Values:
- 
-    | network_category | network_dim | network_alpha | conv_dim | conv_alpha |
-    | :---: | :---: | :---: | :---: | :---: |
-    | LoRA | 32 | 1 | - | - |
-    | LoCon | 16 | 8 | 8 | 1 |
-    | LoHa | 8 | 4 | 4 | 1 |
+[日本語版README](./README-ja.md)
 
-  - User can choose which `network_category` to train, option: `["LoRA", "LoCon", "LoCon_Lycoris", "LoHa"]`
-    - `LoRA` is normal LoRA, only trained cross-attention/transformer layer
-    - `LoCon` is LoRA for Convolutional Network but using `networks.lora` as default `network_module`, doesn't support `dropout`
-    - `LoCon_Lycoris` is LoRA for Convolutional Network but using `lycoris.kohya` as default `network_module`
-      - Why? current state of LoCon trained with lycoris==0.1.3 can't be loaded in Additional Network extension in Web UI, because:
-        1. AddNet extension doesn't support `cp_decomposition`
-        2. LyCORIS developer is temporarily removing hook support for AddNet extension to prevent code conflict
-    - `LoHa` is LoRA with Hadamard Product representation, slower to train than other `network_category`, need more documentation
-  - Deleted `network_module` support for `locon.locon_kohya` as it's now deprecated
-  - `conv_dim` and `conv_alpha` now has separated markdown field
-- Changed `Visualize loss graph (Optional)` position to `6.1`, because it seems has dependency conflict with `6.4. Launch Portable Web UI`
-- `6.3. Inference` set default `network_module` to `networks.lora`. Doesn't support LoCon and LoHa trained with LyCORIS.
-- Revamped `6.4. Launch Portable Web UI` to match the latest [Cagliostro Colab UI](https://github.com/Linaqruf/sd-notebook-collection/blob/main/cagliostro-colab-ui.ipynb)
-  
-## Useful Links
-- Official repository : [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts)
-- Gradio Web UI Implementation : [bmaltais/kohya_ss](https://github.com/bmaltais/kohya_ss)
-- Automatic1111 Web UI extensions : [dPn08/kohya-sd-scripts-webui](https://github.com/ddPn08/kohya-sd-scripts-webui)
+For easier use (GUI and PowerShell scripts etc...), please visit [the repository maintained by bmaltais](https://github.com/bmaltais/kohya_ss). Thanks to @bmaltais!
 
-## Overview
-- Fine tuning of Stable Diffusion's U-Net using Diffusers
-- Addressing improvements from the NovelAI article, such as using the output of the penultimate layer of CLIP (Text Encoder) instead of the last layer and learning at non-square resolutions with aspect ratio bucketing.
-- Extends token length from 75 to 225 and offers automatic caption and automatic tagging with BLIP, DeepDanbooru, and WD14Tagger
-- Supports hypernetwork learning and is compatible with Stable Diffusion v2.0 (base and 768/v)
-- By default, does not train Text Encoder for fine tuning of the entire model, but option to train Text Encoder is available.
-- Ability to make learning even more flexible than with DreamBooth by preparing a certain number of images (several hundred or more seems to be desirable).
+This repository contains the scripts for:
 
-## Original post for each dedicated script:
-- [gen_img_diffusers](https://note.com/kohya_ss/n/n2693183a798e)
-- [merge_vae](https://note.com/kohya_ss/n/nf5893a2e719c)
-- [convert_diffusers20_original_sd](https://note.com/kohya_ss/n/n374f316fe4ad)
-- [detect_face_rotate](https://note.com/kohya_ss/n/nad3bce9a3622)
-- [diffusers_fine_tuning](https://note.com/kohya_ss/n/nbf7ce8d80f29)
-- [train_db_fixed](https://note.com/kohya_ss/n/nee3ed1649fb6)
-- [merge_block_weighted](https://note.com/kohya_ss/n/n9a485a066d5b)
+* DreamBooth training, including U-Net and Text Encoder
+* Fine-tuning (native training), including U-Net and Text Encoder
+* LoRA training
+* Texutl Inversion training
+* Image generation
+* Model conversion (supports 1.x and 2.x, Stable Diffision ckpt/safetensors and Diffusers)
 
-## Change Logs:
+__Stable Diffusion web UI now seems to support LoRA trained by ``sd-scripts``.__ (SD 1.x based only) Thank you for great work!!! 
 
-#### 2023
-##### v14.1 (09/03):
-__What Changes?__
-- Fix xformers version for all notebook to adapt `Python 3.9.16`
-- Added new `network_module` : `lycoris.kohya`. Read [KohakuBlueleaf/LyCORIS](https://github.com/KohakuBlueleaf/Lycoris)
-  - Previously LoCon, now it's called `LyCORIS`, a Home for custom network module for [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts).
-  - Algo List as of now: 
-    - lora: Conventional Methods a.k.a LoCon
-    - loha: Hadamard product representation introduced by FedPara
-  - For backward compatibility, `locon.locon_kohya` still exist, but you can train LoCon in the new `lycoris.kohya` module as well by specify `["algo=lora"]` in the `network_args`
-- Added new condition to enable or disable `generating sample every n epochs/steps`, by disabling it, `sample_every_n_type_value` automatically set to int(999999)
+## About requirements.txt
 
-##### v14 (07/03):
-__What Changes?__
-- Refactoring (again)
-  - Moved `support us` button to separated and hidden section
-  - Added `old commit` link to all notebook
-  - Deleted `clone sd-scripts` option because too risky, small changes my break notebook if new updates contain syntax from python > 3.9 
-  - Added `wd-1.5-beta-2` and `wd-1.5-beta-2-aesthetic` as pretrained model for `SDv2.1 768v model`, please use `--v2` and `--v_parameterization` if you wanna train with it.
-  - Removed `folder naming scheme` cell for colab dreambooth method, thanks to everyone who made this changes possible. Now you can set `train_data_dir` from gdrive path without worrying `<repeats>_<token> class>` ever again
-  -
-- Revamped `V. Training Model` section
-  - Now it has 6 major cell
-    1. Model Config:
-        - Specify pretrained model path, vae to use, your project name, outputh path and if you wanna train on `v2` and or `v_parameterization` here.
-    2. Dataset Config:
-        - This cell will create `dataset_config.toml` file based on your input. And that `.toml` file will be used for training.
-        - You can set `class_token` and `num_repeats` here instead of renaming your folder like before.
-        - Limitation: even though `--dataset_config` is powerful, but I'm making the workflow to only fit one `train_data_dir` and `reg_data_dir`, so probably it's not compatible to train on multiple concepts anymore. But you can always tweaks `.toml` file.
-        - For advanced users, please don't use markdown but instead tweak the python dictionaries yourself, click `show code` and you can add or remove variable, dataset, or dataset.subset from dict, especially if you want to train on multiple concepts.
-    3. Sample Prompt Config
-        - This cell will create `sample_prompt.txt` file based on your input. And that `.txt` file will be used for generating sample.
-        - Specify `sample_every_n_type` if you want to generate sample every n epochs or every n steps.
-        - The prompt weighting such as `( )` and `[ ]` are not working.
-        - Limitation: Only support 1 line of prompt at a time
-        - For advanced users, you can tweak `sample_prompt.txt` and add another prompt based on arguments below.
-        - Supported prompt arguments:
-            - `--n` : Negative Prompt
-            - `--w` : Width
-            - `--h` : Height
-            - `--d` : Seed, set to -1 for using random seed
-            - `--l` : CFG Scale
-            - `--s` : Sampler steps
-     4. Optimizer Config (LoRA and Optimizer Config)
-        - Additional Networks Config:
-          - Added support for LoRA in Convolutional Network a.k.a [KohakuBlueleaf/LoCon](https://github.com/KohakuBlueleaf/LoCon) training, please specify `locon.locon_kohya` in `network_module`
-          - Revamped `network_args`, now you can specify more than 2 custom args, but you need to specify it inside a list, e.g. `["conv_dim=64","conv_alpha=32"]`
-          - `network_args` for LoCon training as follow: `"conv_dim=RANK_FOR_CONV" "conv_alpha=ALPHA_FOR_CONV" "dropout=DROPOUT_RATE"`
-          - Remember conv_dim + network_dim, so if you specify both at 128, you probably will get 300mb filesize LoRA
-          - Now you can specify if you want to train on both UNet and Text Encoder or just wanna train one of them.
-        - Optimizer Config
-          - Similar to `network_args`, now you can specify more than 2 custom args, but you need to specify it inside a list, e.g. for DAdaptation : `["decouple=true","weight_decay=0.6"]`
-          - Deleted `lr_scheduler_args` and added `lr_scheduler_num_cycles` and `lr_scheduler_power` back
-          - Added `Adafactor` for `lr_scheduler`
-     5. Training Config
-        - This cell will create `config_file.toml` file based on your input. And that `.toml` file will be used for training.
-        - Added `num_epochs` back to LoRA notebook and `max_train_steps` to dreambooth and native training 
-        - For advanced users, you can tweak training config without re-run specific training cell by editing `config_file.toml`
-     6. Start Training
-        - Set config path to start training. 
-           - sample_prompt.txt
-           - config_file.toml
-           - dataset_config.toml
-        - You can also import training config from other source, but make sure you change all important variable such as what model and what vae did you use 
-- Revamped `VI. Testing` section  
-  - Deleted all wrong indentation
-  - Added `Portable Web UI` as an alternative to try your trained model and LoRA, make sure you still got more time.
-- Added new changes to upload `config_file` to huggingface.
-##### v13 (25/02):
-__What Changes?__
-- Of course refactoring, cleaning and make the code and cells more readable and easy to maintain.
-  - Moved `Login to Huggingface Hub` to `Deployment` section, in the same cell with defining repo.
-  - Merged `Install Kohya Trainer`, `Install Dependencies`, and `Mount Drive` cells
-  - Merged `Dataset Cleaning` and `Convert RGB to RGBA` cells
-  - Deleted `Image Upscaler` cell, because bucketing automatically upscale your dataset (converted to image latents) to `min_bucket_reso` value.
-  - Deleted `Colab Ram Patch` because now you can set `--lowram` in the training script.
-  - Revamped `Unzip dataset` cell to make it look simpler
-- Added xformers pre-compiled wheel for `A100` 
-- Revamped `Pretrained Model` section
-  - Deleted some old pretrained model
-  - Added `Anything V3.3`, `Chilloutmix`, and `Counterfeit V2.5` as new pretrained model for SD V1.x based model
-  - Added `Replicant V1.0`, `WD 1.5 Beta` and `Illuminati Diffusion V1` as new pretrained model for SD V2.x 768v based model
-  - Changed `Stable Diffusion 1.5` pretrained model to pruned one.
-- Changed Natural Language Captioning back from GIT to BLIP with `beam_search` enabled by default
-- Revamped Image Scraper from simple to advanced, added new feature such as:
-  - Added `safebooru` to booru list
-  - Added `custom_url` option, so you can copy and paste the url instead of specify which booru sites and tags to scrape
-  - Added `user_agent` field, because you can't access some image board with default user_agent
-  - Added `limit_rate` field to limit your count
-  - [Experimental] Added `with_aria2c` to scrape your dataset, not a wrapper, just a simple trick to extract urls with `gallery-dl` and download them with aria2c instead. Fast but seems igonoring `--write-tags`.
-  - All downloaded tags now saved with `.txt` format instead of `.jpg.txt`
-  - Added `additional_arguments` to make it more flexible if you want to try other args
-- Revamped `Append Custom Tag` cell
-  - Create new caption file for every image file based on extension provided (`.txt/.caption`) if you didn't want to use BLIP or WD Tagger
-  - Added `--keep_tokens` args to the cell
-- Revamped `Training Model` section. 
-  - Revamped `prettytable` for easier maintenance and bug fixing
-  - Now it has 4 major cell:
-    - Folder Config
-      - To specify `v2`, `v2_parameterization` and all important folder and project_name
-    - LoRA and Optimizer Config
-      - Only `Optimizer Config` for notebook outside LoRA training
-      - All about Optimizer, `learning_rate` and `lr_scheduler` goes here
-      - Added new Optimizer from latest kohya-ss/sd-script, all available optimizer : `"AdamW", "AdamW8bit", "Lion", "SGDNesterov", "SGDNesterov8bit", "DAdaptation", "AdaFactor"
-      - Currently you can't use `DAdaptation` if you're in Colab free tier because it need more VRAM
-      - Added `--optimizer_args` for custom args, useful if you want to try adjusting weight decay, betas etc
-    - Dataset Config
-      - Only available for Dreambooth method notebook, it basically bucketing cell for Dreambooth.
-      - Added `caption dropout`, you can drop your caption or tags by adjusting dropout rates.
-      - Added `--bucket_reso_steps` and `--bucket_no_upscale`
-    - Training Config
-      - Added `--noise_offset`, read [Diffusion With Offset Noise](https://www.crosslabs.org//blog/diffusion-with-offset-noise)
-      - Added `--lowram` to load the model in VRAM instead of CPU
-- Revamped `Convert Diffusers to Checkpoint` cell, now it's more readable.
-- Fixing bugs when `output_dir` located in google drive, it assert an error because of something like `/content/drive/dreambooth_cmd.yaml` which is forbidden, now instead of saved to `{output_dir}`, now training args history are saved to `{training_dir}`
+These files do not contain requirements for PyTorch. Because the versions of them depend on your environment. Please install PyTorch at first (see installation guide below.) 
 
-__News__
-- I'm in burnout phase, so I'm sorry for the lame update.
-- [Fast Kohya Trainer](https://github.com/Linaqruf/kohya-trainer/blob/main/fast-kohya-trainer.ipynb), an idea to merge all Kohya's training script into one cell. Please check it [here](https://colab.research.google.com/github/Linaqruf/kohya-trainer/blob/main/fast-kohya-trainer.ipynb). 
-  - Please don't expect high, it just a secondary project and maintaining 1-click cell is hard. So I won't prioritized it.
-- Kohya Textual Inversion are cancelled for now, because maintaining 4 Colab Notebook already making me this tired. 
-  - Please use this instead, not kohya script but everyone on WD server using this since last year:
-    - [stable-textual-inversion-cafe colab](https://colab.research.google.com/drive/1bbtGmH0XfQWzVKROhiIP8x5EAv6XuohJ) 
-    - [stable-textual-inversion-cafe Colab - Lazy Edition](https://colab.research.google.com/drive/1ouTImTpYkBrX5hiVWrzJeFtOyKES92uV)
-- I wrote a Colab Notebook for #AUTOMATIC1111's #stablediffusion Web UI, with built-in Mikubill's #ControlNet extension. All Annotator and extracted ControlNet model are provided in the notebook. It's called [Cagliostro Colab UI](https://colab.research.google.com/github/Linaqruf/sd-notebook-collection/blob/main/cagliostro-colab-ui.ipynb). Please try it.
-  - You can use new UI/UX from [Anapnoe](https://github.com/anapnoe/stable-diffusion-webui) in the notebook. You can find the option in `experimental` section.
-![image](https://user-images.githubusercontent.com/50163983/221345472-0f9fd9b3-0fe6-4d9d-af0b-05d9e6001e03.png)
- 
-Training script changes:
-- Please read [kohya-ss/sd-scripts](https://github.com/kohya-ss/sd-scripts) for recent updates.
+The scripts are tested with PyTorch 1.12.1 and 1.13.0, Diffusers 0.10.2.
 
-##### v12 (05/02):
-__What Changes?__
-- Refactored the 4 notebooks (again)
-- Restored the `--learning_rate` function in `kohya-LoRA-dreambooth.ipynb` and `kohya-LoRA-finetuner.ipynb` [#52](https://github.com/Linaqruf/kohya-trainer/issues/52)
-- Fixed the cell for inputting custom tags [#48](https://github.com/Linaqruf/kohya-trainer/issues/48) and added the `--keep_tokens` function to prevent custom tags from being shuffled.
-- Added a cell to check if all LoRA modules have been trained properly.
-- Added descriptions for each notebook and links to the relevant notebooks to prevent "training on the wrong notebook" from happening again.
-- Added a cell to check the metadata in the LoRA model.
-- Added a cell to change the transparent background in the train data.
-- Added a cell to upscale the train data using R-ESRGAN
-- Divided the Data Annotation section into two cells:
-  - Removed BLIP and replaced it with `Microsoft/GIT` as the auto-captioning for natural language (git-large-textcaps is the default model).
-  - Updated the Waifu Diffusion 1.4 Tagger to version v2 (SwinV2 is the default model).
-    - The user can adjust the threshold for general tags. It is recommended to set the threshold higher (e.g. `0.85`) if you are training on objects or characters, and lower the threshold (e.g. `0.35`) for training on general, style, or environment.
-    - The user can choose from three available models.
-- Added a field for uploading to the Huggingface organization account.
-- Added the `--min_bucket_reso=320` and `--max_bucket_reso=1280` functions for training resolutions above 512 (e.g. 640 and 768), Thanks Trauter!
+## Links to how-to-use documents
 
-Training script Changes([kohya_ss](https://github.com/kohya-ss))
-- Please read [Updates 3 Feb. 2023, 2023/2/3](https://github.com/kohya-ss/sd-scripts/blob/fb230aff1b434a21fc679e4902ac1ff5aab1d76b/README.md) for recent updates.
+All documents are in Japanese currently.
 
-##### v11.5 (31/01):
-__What Changes?__
-- Refactored the 4 notebooks, removing unhelpful comments and making some code more efficient.
-- Removed the `download and generate` regularization images function from `kohya-dreambooth.ipynb` and `kohya-LoRA-dreambooth.ipynb`.
-- Simplified cells to create the `train_folder_directory` and `reg_folder_directory` folders in `kohya-dreambooth.ipynb` and `kohya-LoRA-dreambooth.ipynb`.
-- Improved the download link function from outside `huggingface` using `aria2c`.
-- Set `Anything V3.1` which has been improved CLIP and VAE models as the default pretrained model.
-- Fixed the `parameter table` and created the remaining tables for the dreambooth notebooks.
-- Added `network_alpha` as a supporting hyperparameter for `network_dim` in the LoRA notebook.
-- Added the `lr_scheduler_num_cycles` function for `cosine_with_restarts` and the `lr_scheduler_power` function for `polynomial`.
-- Removed the global syntax `--learning_rate` in each LoRA notebook because `unet_lr` and `text_encoder_lr` are already available.
-- Fixed the `upload to hf_hub` cell function.
+* [Training guide - common](./train_README-ja.md) : data preparation, options etc...
+    * [Dataset config](./config_README-ja.md)
+* [DreamBooth training guide](./train_db_README-ja.md)
+* [Step by Step fine-tuning guide](./fine_tune_README_ja.md):
+* [training LoRA](./train_network_README-ja.md)
+* [training Textual Inversion](./train_ti_README-ja.md)
+* note.com [Image generation](https://note.com/kohya_ss/n/n2693183a798e)
+* note.com [Model conversion](https://note.com/kohya_ss/n/n374f316fe4ad)
 
-Training script Changes([kohya_ss](https://github.com/kohya-ss))
-- Please read [release version 0.4.0](https://github.com/kohya-ss/sd-scripts/releases/tag/v0.4.0) for recent updates.
+## Windows Required Dependencies
 
-##### v11 (19/01):
-- Reformat notebook, 
-  - Added `%store` IPython magic command to store important variable
-  - Now you can change the active directory only by editing directory path in `1.1. Clone Kohya Trainer` cell, and save it using `%store` magic command.
-  - Deleted `unzip` cell and adjust `download zip` cell to do auto unzip as well if it detect path startswith /content/
-  - Added `--flip_aug` to Buckets and Latents cell.
-  - Added `--output_name (your-project)` cell to save Trained Model with custom nam.
-  - Added ability to auto compress `train_data_dir`, `last-state` and `training_logs` before upload them to Huggingface
-- Added `colab_ram_patch` as temporary fix for newest version of Colab after Ubuntu update to `load Stable Diffusion model in GPU instead of RAM`
+Python 3.10.6 and Git:
 
-Training script Changes([kohya_ss](https://github.com/kohya-ss))
-- Please read [release version 0.3.0](https://github.com/kohya-ss/sd-scripts/releases/tag/v0.3.0) for recent updates.
+- Python 3.10.6: https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe
+- git: https://git-scm.com/download/win
 
-##### v10 (02/01) separate release
+Give unrestricted script access to powershell so venv can work:
 
-- Added a function to automatically download the BLIP weight in `make_caption.py`
-- Added functions for LoRA training and generation
-- Fixed issue where text encoder training was not stopped
-- Fixed conversion error for v1 Diffusers->ckpt in `convert_diffusers20_original_sd.py`
-- Fixed npz file name for images with dots in `prepare_buckets_latents.py`
+- Open an administrator powershell window
+- Type `Set-ExecutionPolicy Unrestricted` and answer A
+- Close admin powershell window
 
-Colab UI changes:
-- Integrated the repository's format with kohya-ss/sd-script to facilitate merging
-- You can no longer choose older script versions in the clone cell because the new format does not support it
-- The requirements for both blip and wd tagger have been merged into one requirements.txt file
-- The blip cell has been simplified because `make_caption.py` will now automatically download the BLIP weight, as will the wd tagger
-- A list of sdv2 models has been added to the "download pretrained model" cell
-- The "v2" option has been added to the bucketing and training cells
-- An image generation cell using `gen_img_diffusers.py` has been added below the training cell
+## Windows Installation
 
-#### 2022
-##### v9 (17/12):
-- Added the `save_model_as` option to `fine_tune.py`, which allows you to save the model in any format.
-- Added the `keep_tokens` option to `fine_tune.py`, which allows you to fix the first n tokens of the caption and not shuffle them.
-- Added support for left-right flipping augmentation in `prepare_buckets_latents.py` and `fine_tune.py` with the `flip_aug` option.
+Open a regular Powershell terminal and type the following inside:
 
-##### v8 (13/12):
-- Added support for training with fp16 gradients (experimental feature). This allows training with 8GB VRAM on SD1.x. See "Training with fp16 gradients (experimental feature)" for details.
-- Updated WD14Tagger script to automatically download weights.
+```powershell
+git clone https://github.com/kohya-ss/sd-scripts.git
+cd sd-scripts
 
-##### v7 (7/12):
-- Requires Diffusers 0.10.2 (0.10.0 or later will work, but there are reported issues with 0.10.0 so we recommend using 0.10.2). To update, run `pip install -U diffusers[torch]==0.10.2` in your virtual environment.
-- Added support for Diffusers 0.10 (uses code in Diffusers for `v-parameterization` training and also supports `safetensors`).
-- Added support for accelerate 0.15.0.
-- Added support for multiple teacher data folders. For caption and tag preprocessing, use the `--full_path` option. The arguments for the cleaning script have also changed, see "Caption and Tag Preprocessing" for details.
+python -m venv venv
+.\venv\Scripts\activate
 
-##### v6 (6/12):
-- Temporary fix for an error when saving in the .safetensors format with some models. If you experienced this error with v5, please try v6.
+pip install torch==1.12.1+cu116 torchvision==0.13.1+cu116 --extra-index-url https://download.pytorch.org/whl/cu116
+pip install --upgrade -r requirements.txt
+pip install -U -I --no-deps https://github.com/C43H66N12O12S2/stable-diffusion-webui/releases/download/f/xformers-0.0.14.dev0-cp310-cp310-win_amd64.whl
 
-##### v5 (5/12):
-- Added support for the .safetensors format. Install safetensors with `pip install safetensors` and specify the `use_safetensors` option when saving.
-- Added the `log_prefix` option.
-- The cleaning script can now be used even when one of the captions or tags is missing.
+cp .\bitsandbytes_windows\*.dll .\venv\Lib\site-packages\bitsandbytes\
+cp .\bitsandbytes_windows\cextension.py .\venv\Lib\site-packages\bitsandbytes\cextension.py
+cp .\bitsandbytes_windows\main.py .\venv\Lib\site-packages\bitsandbytes\cuda_setup\main.py
 
-##### v4 (14/12):
-- The script name has changed to fine_tune.py.
-- Added the option `--train_text_encoder` to train the Text Encoder.
-- Added the option `--save_precision` to specify the data format of the saved checkpoint. Can be selected from float, fp16, or bf16.
-- Added the option `--save_state` to save the training state, including the optimizer. Can be resumed with the `--resume` option.
+accelerate config
+```
 
-##### v3 (29/11):
-- Requires Diffusers 0.9.0. To update it, run `pip install -U diffusers[torch]==0.9.0`.
-- Supports Stable Diffusion v2.0. Use the `--v2` option when training (and when pre-acquiring latents). If you are using 768-v-ema.ckpt or stable-diffusion-2 instead of stable-diffusion-v2-base, also use the `--v_parameterization` option when training.
-- Added options to specify the minimum and maximum resolutions of the bucket when pre-acquiring latents.
-- Modified the loss calculation formula.
-- Added options for the learning rate scheduler.
-- Added support for downloading Diffusers models directly from Hugging Face and for saving during training.
-- The cleaning script can now be used even when only one of the captions or tags is missing.
-- Added options for the learning rate scheduler.
+update: ``python -m venv venv`` is seemed to be safer than ``python -m venv --system-site-packages venv`` (some user have packages in global python).
 
-##### v2 (23/11):
-- Implemented Waifu Diffusion 1.4 Tagger for alternative DeepDanbooru for auto-tagging
-- Added a tagging script using WD14Tagger.
-- Fixed a bug that caused data to be shuffled twice.
-- Corrected spelling mistakes in the options for each script.
+Answers to accelerate config:
 
-## Conclusion
-> While Stable Diffusion fine tuning is typically based on CompVis, using Diffusers as a base allows for efficient and fast fine tuning with less memory usage. We have also added support for the features proposed by Novel AI, so we hope this article will be useful for those who want to fine tune their models.
+```txt
+- This machine
+- No distributed training
+- NO
+- NO
+- NO
+- all
+- fp16
+```
 
- — kohya_ss 
+note: Some user reports ``ValueError: fp16 mixed precision requires a GPU`` is occurred in training. In this case, answer `0` for the 6th question: 
+``What GPU(s) (by id) should be used for training on this machine as a comma-separated list? [all]:`` 
 
-## Credit
-[Kohya](https://twitter.com/kohya_ss) | [Lopho](https://github.com/lopho/stable-diffusion-prune) for prune script | Just for my part
+(Single GPU with id `0` will be used.)
+
+### about PyTorch and xformers
+
+Other versions of PyTorch and xformers seem to have problems with training.
+If there is no other reason, please install the specified version.
+
+## Upgrade
+
+When a new release comes out you can upgrade your repo with the following command:
+
+```powershell
+cd sd-scripts
+git pull
+.\venv\Scripts\activate
+pip install --use-pep517 --upgrade -r requirements.txt
+```
+
+Once the commands have completed successfully you should be ready to use the new version.
+
+## Credits
+
+The implementation for LoRA is based on [cloneofsimo's repo](https://github.com/cloneofsimo/lora). Thank you for great work!
+
+The LoRA expansion to Conv2d 3x3 was initially released by cloneofsimo and its effectiveness was demonstrated at [LoCon](https://github.com/KohakuBlueleaf/LoCon) by KohakuBlueleaf. Thank you so much KohakuBlueleaf!
+
+## License
+
+The majority of scripts is licensed under ASL 2.0 (including codes from Diffusers, cloneofsimo's and LoCon), however portions of the project are available under separate license terms:
+
+[Memory Efficient Attention Pytorch](https://github.com/lucidrains/memory-efficient-attention-pytorch): MIT
+
+[bitsandbytes](https://github.com/TimDettmers/bitsandbytes): MIT
+
+[BLIP](https://github.com/salesforce/BLIP): BSD-3-Clause
+
+## Change History
+
+- 21 Mar. 2023, 2023/3/21:
+  - Add `--vae_batch_size` for faster latents caching to each training script. This  batches VAE calls.
+    - Please start with`2` or `4` depending on the size of VRAM.
+  - Fix a number of training steps with `--gradient_accumulation_steps` and `--max_train_epochs`. Thanks to tsukimiya!
+  - Extract parser setup to external scripts. Thanks to robertsmieja!
+  - Fix an issue without `.npz` and with `--full_path` in training.
+  - Support extensions with upper cases for images for not Windows environment.
+  - Fix `resize_lora.py` to work with LoRA with dynamic rank (including `conv_dim != network_dim`). Thanks to toshiaki!
+  - latentsのキャッシュを高速化する`--vae_batch_size` オプションを各学習スクリプトに追加しました。VAE呼び出しをバッチ化します。
+    -VRAMサイズに応じて、`2` か `4` 程度から試してください。
+  - `--gradient_accumulation_steps` と `--max_train_epochs` を指定した時、当該のepochで学習が止まらない不具合を修正しました。tsukimiya氏に感謝します。
+  - 外部のスクリプト用に引数parserの構築が関数化されました。robertsmieja氏に感謝します。
+  - 学習時、`--full_path` 指定時に `.npz` が存在しない場合の不具合を解消しました。
+  - Windows以外の環境向けに、画像ファイルの大文字の拡張子をサポートしました。
+  - `resize_lora.py` を dynamic rank （rankが各LoRAモジュールで異なる場合、`conv_dim` が `network_dim` と異なる場合も含む）の時に正しく動作しない不具合を修正しました。toshiaki氏に感謝します。
+
+
+  - Sample image generation:
+    A prompt file might look like this, for example
+
+    ```
+    # prompt 1
+    masterpiece, best quality, (1girl), in white shirts, upper body, looking at viewer, simple background --n low quality, worst quality, bad anatomy,bad composition, poor, low effort --w 768 --h 768 --d 1 --l 7.5 --s 28
+
+    # prompt 2
+    masterpiece, best quality, 1boy, in business suit, standing at street, looking back --n (low quality, worst quality), bad anatomy,bad composition, poor, low effort --w 576 --h 832 --d 2 --l 5.5 --s 40
+    ```
+
+    Lines beginning with `#` are comments. You can specify options for the generated image with options like `--n` after the prompt. The following can be used.
+
+    * `--n` Negative prompt up to the next option.
+    * `--w` Specifies the width of the generated image.
+    * `--h` Specifies the height of the generated image.
+    * `--d` Specifies the seed of the generated image.
+    * `--l` Specifies the CFG scale of the generated image.
+    * `--s` Specifies the number of steps in the generation.
+
+    The prompt weighting such as `( )` and `[ ]` are working.
+
+  - サンプル画像生成：
+    プロンプトファイルは例えば以下のようになります。
+
+    ```
+    # prompt 1
+    masterpiece, best quality, 1girl, in white shirts, upper body, looking at viewer, simple background --n low quality, worst quality, bad anatomy,bad composition, poor, low effort --w 768 --h 768 --d 1 --l 7.5 --s 28
+
+    # prompt 2
+    masterpiece, best quality, 1boy, in business suit, standing at street, looking back --n low quality, worst quality, bad anatomy,bad composition, poor, low effort --w 576 --h 832 --d 2 --l 5.5 --s 40
+    ```
+
+    `#` で始まる行はコメントになります。`--n` のように「ハイフン二個＋英小文字」の形でオプションを指定できます。以下が使用可能できます。
+
+    * `--n` Negative prompt up to the next option.
+    * `--w` Specifies the width of the generated image.
+    * `--h` Specifies the height of the generated image.
+    * `--d` Specifies the seed of the generated image.
+    * `--l` Specifies the CFG scale of the generated image.
+    * `--s` Specifies the number of steps in the generation.
+
+    `( )` や `[ ]` などの重みづけは動作しません。
+
+Please read [Releases](https://github.com/kohya-ss/sd-scripts/releases) for recent updates.
+最近の更新情報は [Release](https://github.com/kohya-ss/sd-scripts/releases) をご覧ください。
