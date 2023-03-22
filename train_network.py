@@ -551,10 +551,12 @@ def train(args):
                 loss_weights = batch["loss_weights"]  # 各sampleごとのweight
                 loss = loss * loss_weights
 
-                loss = loss.mean()  # 平均なのでbatch_sizeで割る必要なし
-
                 if args.min_snr_gamma:
                   loss = apply_snr_weight(loss, latents, noisy_latents, args.min_snr_gamma)
+
+                loss = loss.mean()  # 平均なのでbatch_sizeで割る必要なし
+
+
 
                 accelerator.backward(loss)
                 if accelerator.sync_gradients and args.max_grad_norm != 0.0:
