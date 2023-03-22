@@ -24,6 +24,8 @@ from library.config_util import (
     BlueprintGenerator,
 )
 
+import library.custom_train_functions as custom_train_functions
+from library.custom_train_functions import apply_snr_weight 
 
 def collate_fn(examples):
     return examples[0]
@@ -551,6 +553,9 @@ def train(args):
 
                 loss = loss.mean()  # 平均なのでbatch_sizeで割る必要なし
 
+                if args.min_snr_gamma:
+                  loss = apply_snr_weight(loss, latents, noisy_latents, args.min_snr_gamma)
+
                 accelerator.backward(loss)
                 if accelerator.sync_gradients and args.max_grad_norm != 0.0:
                     params_to_clip = network.get_trainable_params()
@@ -652,6 +657,7 @@ if __name__ == "__main__":
     train_util.add_training_arguments(parser, True)
     train_util.add_optimizer_arguments(parser)
     config_util.add_config_arguments(parser)
+    custom_train_functions.add_custom_train_arguments(parser)
 
     parser.add_argument("--no_metadata", action="store_true", help="do not save metadata in output model / メタデータを出力先モデルに保存しない")
     parser.add_argument(
