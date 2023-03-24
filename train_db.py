@@ -21,7 +21,8 @@ from library.config_util import (
     ConfigSanitizer,
     BlueprintGenerator,
 )
-
+import library.custom_train_functions as custom_train_functions
+from library.custom_train_functions import apply_snr_weight 
 
 def collate_fn(examples):
     return examples[0]
@@ -114,7 +115,7 @@ def train(args):
         vae.requires_grad_(False)
         vae.eval()
         with torch.no_grad():
-            train_dataset_group.cache_latents(vae)
+            train_dataset_group.cache_latents(vae, args.vae_batch_size)
         vae.to("cpu")
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
@@ -159,7 +160,7 @@ def train(args):
 
     # 学習ステップ数を計算する
     if args.max_train_epochs is not None:
-        args.max_train_steps = args.max_train_epochs * len(train_dataloader)
+        args.max_train_steps = args.max_train_epochs * math.ceil(len(train_dataloader) / accelerator.num_processes / args.gradient_accumulation_steps)
         print(f"override steps. steps for {args.max_train_epochs} epochs is / 指定エポックまでのステップ数: {args.max_train_steps}")
 
     if args.stop_text_encoder_training is None:
@@ -291,6 +292,10 @@ def train(args):
                 loss_weights = batch["loss_weights"]  # 各sampleごとのweight
                 loss = loss * loss_weights
 
+                if args.min_snr_gamma:
+                  loss = apply_snr_weight(loss, timesteps, noise_scheduler, args.min_snr_gamma)
+
+
                 loss = loss.mean()  # 平均なのでbatch_sizeで割る必要なし
 
                 accelerator.backward(loss)
@@ -381,7 +386,7 @@ def train(args):
         print("model saved.")
 
 
-if __name__ == "__main__":
+def setup_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
     train_util.add_sd_models_arguments(parser)
@@ -390,6 +395,7 @@ if __name__ == "__main__":
     train_util.add_sd_saving_arguments(parser)
     train_util.add_optimizer_arguments(parser)
     config_util.add_config_arguments(parser)
+    custom_train_functions.add_custom_train_arguments(parser)
 
     parser.add_argument(
         "--no_token_padding",
@@ -402,6 +408,12 @@ if __name__ == "__main__":
         default=None,
         help="steps to stop text encoder training, -1 for no training / Text Encoderの学習を止めるステップ数、-1で最初から学習しない",
     )
+
+    return parser
+
+
+if __name__ == "__main__":
+    parser = setup_parser()
 
     args = parser.parse_args()
     args = train_util.read_config_from_file(args, parser)
